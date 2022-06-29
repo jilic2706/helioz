@@ -12,22 +12,21 @@
                 {{ session('success') }}
             </x-alert-success>
 
-            {{-- @if(request()->routeIs('leave-requests.index'))
-                <a href="{{ route('leave_requests.create') }}" class="btn-link btn-lg mb-2">+ New Request</a>
-            @endif --}}
+            @if(request()->routeIs('leave-requests.index'))
+                <a href="{{ route('leave-requests.create') }}" class="btn-link btn-lg mb-2">+ New Request</a>
+            @endif
 
             @forelse ($leave_requests as $leave_request)
                 <div class="my-6 p-6 bg-white border-b border-gray-200 shadow-sm sm:rounded-lg">
                     <h2 class="font-bold text-2xl">
-                        {{-- <a href="{{ route('leave-requests.show', $leave_request) }}">{{ $leave_request->user()->name }}</a> --}}
+                        <a href="{{ route('leave-requests.show', $leave_request) }}">{{ $leave_request->uuid }}</a>
                     </h2>
                     <p class="mt-2">
-                        {{ Str::limit($leave_request->reason, 200) }}
+                        Issued by <span class="font-bold">{{ $leave_request->user->name }}</span> {{ $leave_request->created_at->diffForHumans() }}
                     </p>
-                    <span class="block mt-4 text-sm opacity-70">{{ $leave_request->created_at->diffForHumans() }}</span>
                 </div>
             @empty
-                <p>You are no requests yet.</p>
+                <p class="text-center 2xl:my-80 lg:my-60 my-40">You are no requests yet.</p>
             @endforelse
 
             {{ $leave_requests->links() }}

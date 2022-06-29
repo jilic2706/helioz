@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\Models\LeaveRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +36,7 @@ class LeaveRequestController extends Controller
      */
     public function create()
     {
-        //
+        return view('leaveRequests.create');
     }
 
     /**
@@ -47,7 +47,16 @@ class LeaveRequestController extends Controller
      */
     public function store(Request $request)
     {
-       //
+       $request->validate([
+        'reason' => 'required'
+       ]);
+
+       Auth::user()->requests()->create([
+        'uuid' => Str::uuid(),
+        'reason' => $request->reason
+       ]);
+
+       return to_route('leave-requests.index');
     }
 
     /**
@@ -91,11 +100,17 @@ class LeaveRequestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  LeaveRequest $leave_request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(LeaveRequest $leave_request)
     {
-        //
+        if(!$leave_request->user->is(Auth::user())) {
+            return abort(403);
+        }
+
+        $leave_request->delete();
+
+        return to_route('leave-requests.index')->with('success', 'Request has successfully been removed.');
     }
 }

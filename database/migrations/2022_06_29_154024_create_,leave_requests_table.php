@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('leave_requests', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
             $table->foreignId('user_id')->constrained();
-            $table->dateTime('from');
-            $table->dateTime('to');
+            $table->dateTime('from')->default(now());
+            $table->dateTime('to')->default(now());
             $table->longText('reason');
             $table->timestamps();
         });

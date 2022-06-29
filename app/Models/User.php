@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Request;
 use App\Models\Department;
+use App\Models\LeaveRequest;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -45,7 +45,7 @@ class User extends Authenticatable
     ];
 
     public function requests() {
-        return $this->hasMany(Request::class);
+        return $this->hasMany(LeaveRequest::class);
     }
 
     public function department() {
